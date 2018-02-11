@@ -46,6 +46,7 @@ ret = strtok(NULL,"(");
 int l = i; //remember i for later
 for (i; i>=0; --i) {
 cmds[j] = strtok(cmds_args[i]," \n"); //array of commands only
+//*CMDS IN EXECUTION ORDER, LAST IS FIRST
 //char* my_argv[max_argv_size];
 my_argv[0] = cmds[j]; //my_argv[0] must contain 
 //function name, used in execvp via args[] (see below)
