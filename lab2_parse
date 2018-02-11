@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+
+int main (int argc, char* argv[]) {
+
+int  max_args = 15;
+int max_argv_size = max_args + 2; //one for argv[0], one for null terminator
+char* cmds_args[max_args];
+char* my_argv[max_argv_size];
+char* cmds[max_args];
+char** args[max_args];
+int size = 50;
+char buffer[size];
+
+printf("Input: ");
+
+char* input_string = fgets(buffer, size, stdin);
+                if(input_string==0){//for EOF with cntrl+D
+                        printf("EOF\n");
+                        printf("Goodbye\n");
+                       // exit(-1);
+                       return 0;
+                }
+//                printf("%s\n", input_string);
+                if(input_string[strlen(input_string)-1] == '\n'){
+                        input_string[strlen(input_string)-1] = 0;
+                }
+
+
+//fgets(buffer,size,stdin);
+int i = 0;
+int j=0;
+cmds_args[i] = strtok(buffer,"("); //stores commands and args initially
+char* ret = strtok(NULL,"(");
+while (ret!=NULL) {
+i++;
+if (i == max_args) {
+printf("Too many commands \n");
+//exit(-1);
+return 0;
+}
+cmds_args[i] = ret;
+ret = strtok(NULL,"(");
+}
+int l = i; //remember i for later
+for (i; i>=0; --i) {
+cmds[j] = strtok(cmds_args[i]," \n"); //array of commands only
+//char* my_argv[max_argv_size];
+my_argv[0] = cmds[j]; //my_argv[0] must contain 
+//function name, used in execvp via args[] (see below)
+ret = strtok(NULL, " \n");
+int m = 0;
+while (ret != NULL) {
+m++;
+if (m==max_args) {
+printf("Too many arguments \n");
+//exit(-1);
+return 0;
+}
+
+my_argv[m] = ret;
+ret = strtok(NULL," \n");
+}
+my_argv[m+1] = '\0';
+if (my_argv[2] == NULL) {
+}
+
+args[j] = my_argv; //array of my_argv's correlates with cmd[]
+j++;
+}
+j = 0;
+for (j;j<=l;j++) {
+execvp(cmds[j],args[j]);
+}
+
+//while (input !=NULL) {
+//i=0;
+//printf("input loop\n");
+//while (sub_input!=NULL) {
+//if(i==0) {
+////cmd = sub_input;
+//}
+//
+//printf("subinput loop\n");
+//if (i<max_argv_size-1) { 
+//my_argv[i] = sub_input;
+//}        
+//i = i+1;  
+//sub_input = strtok(NULL," \n"); 
+//}       
+//my_argv[i] = '\0'; 
+////execvp(cmd, my_argv);
+//      
+//printf("exited subinput\n");
+//input = strtok(NULL,"(");
+//    
+//int j = j+1;
+//cmds[j] = input;
+//sub_input = strtok(cmds[j], " \n");
+//}   
+return 0;
