@@ -7,7 +7,45 @@
 
 //from my git
 //
+
+/**Pseudocode for syntax error checking of pipes**/
+/* //Don't know if this works
+int ind=1;
+for(ind; ind< sizeof(cmd)/sizeof(cmd[0]); ind++){
+	if(strcmp(my_argv[ind], "(")==0)
+	{
+		if(ind==1){
+			//first thing is pipe
+			printf("Invalid syntax\n");
+			exit(0);
+		}
+		if(my_argv[ind-1]==my_argv[ind]){
+			//previous argument was pipe
+			printf("Invalid syntax, two pipes\n");
+			exit(0);
+		}
+		//otherwise can continue after for loop with the rest of the code
+	}
+}
+*/
+
+void cd (char* newdir){
+	/**Haven't tested this with current code**/
+	int cdd = chdir(newdir);
+	if(cdd==-1){
+		perror("cd");
+		exit(-2);
+	}
+}
+
 void func(int numcmd, char* cmds[], char** args[]){
+
+if(cmd=='cd'){
+	/** Not sure if this is the best place for it **/
+	cd(args[1]);
+}
+
+
 int l=numcmd;
 int j = 0;
 int i=0;
@@ -49,7 +87,7 @@ exit(0);
 close(newpipe[1]);
 }
 
-if (j==l) {  //if last command?
+if (j==l) {  //if last command
 frk = fork();
 if(frk==-1){
 perror("Fork j=l");
@@ -104,7 +142,11 @@ char** args[max_args];
 int bufferSize=256;
 char buffer[bufferSize];
 
-printf("Enter input: ");
+printf("Enter input: "); //can comment this out if you want.
+
+/** EXTRA CREDIT CODE **/
+char* dir = getcwd(buffer, bufferSize) + strlen(getenv("HOME"));
+printf("slush|%s>", dir);
 
 char* input_string = fgets(buffer, bufferSize, stdin);
 if(input_string==0){//for EOF with cntrl+D
