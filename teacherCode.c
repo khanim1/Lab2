@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-//from my git
+/****  still needs cd code, and syntax error checking  *****/
 
 void func(int numcmd, char* cmds[], char** args[]){
 	
