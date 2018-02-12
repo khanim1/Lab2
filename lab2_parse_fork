@@ -76,27 +76,27 @@ j = 0;
 i=0;
 int ret_val;
 int frk;
-int* newpipe;
+//int* newpipe;
 int* oldpipe;
+int err;
 for (j;j<=l;j++) {
+int newpipe[2];
 if (j!=l) {
-int fd[2];
-if (j!=0) {
-oldpipe = newpipe;
-}
-newpipe = fd;
+//int fd[2];
+//newpipe = fd;
 pipe(newpipe);
 frk = fork();
 i++;
 }
-printf("newpipe[1]: %d\n",*newpipe);
 if (j==0) {
 if (frk ==0) {
-//printf("fd[1]: %d\n",fd[1]);
-dup2(newpipe[1],STDOUT_FILENO);
+err = dup2(newpipe[1],STDOUT_FILENO);
+if(err == -1) perror ("Error dup'ing: ");
+printf("made it \n");
 ret_val = execvp(cmds[j],args[j]);
 if (ret_val == -1) perror ("Error exec'ing");
 close(newpipe[0]);
+oldpipe = newpipe;
 }
 close(newpipe[1]);
 }
@@ -121,6 +121,7 @@ ret_val = execvp(cmds[j],args[j]);
 if (ret_val == -1) perror ("Error exec'ing");
 close(oldpipe[1]);
 close(newpipe[0]);
+oldpipe = newpipe;
 }
 close(newpipe[1]);
 close(oldpipe[0]);
