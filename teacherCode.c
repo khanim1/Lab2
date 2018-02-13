@@ -21,6 +21,14 @@ void func(int numcmd, char* cmds[], char** args[]){
 	int newpipe[2];
 	int oldpipe[2];
 	//while(1){
+	if (strcmp(cmds[0],"cd")==0) {
+		printf("Completed with:%s\n",cmds[0]);
+		int cd_err = chdir(args[0][1]);
+		if (cd_err==-1) {
+		perror("cd error: \n");
+		exit(-2);
+		}
+	}
 	for (j;j<=l;j++) { //l is num of commands
 		if (j!=l) {
 			printf("In this loop\n");
